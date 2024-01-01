@@ -12,21 +12,18 @@ app = Flask(__name__)
 
 
 @app.route('/states', strict_slashes=False)
-def states():
-    """ Displays a list of states"""
-    states = list(storage.all(State).values())
-    sorted_states = sorted(states, key=lambda state: state.name)
-    return render_template('7-states_list.html', states=sorted_states)
-
-
 @app.route('/states/<id>', strict_slashes=False)
-def state_with_id(id):
+def state_with_id(id=None):
     """ Display single state"""
-    states = storage.all(State)
-    for state in states.values():
-        if state.id == id:
-            found_state = state
-    return render_template('9-states.html', state=found_state)
+    states = sorted(list(storage.all(State).values()),
+                    key=lambda s: s.name)
+    if id:
+        for state in states:
+            if state.id == id:
+                found_state = state
+        return render_template('9-states.html', states=state, found_state=found_state)
+    else:
+        return render_template('9-states.html', states=states)
 
 
 @app.teardown_appcontext
