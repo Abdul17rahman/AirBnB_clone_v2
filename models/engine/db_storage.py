@@ -69,3 +69,12 @@ class DBStorage:
         """ This method removes items from db"""
         self.Session.remove()
         self.reload()
+
+    def get(self, cls, id):
+        """retrieve one object from filestorage"""
+        obj = self.all(cls)
+        if obj:
+            item = cls.__name__ + '.' + id
+            return obj[item]
+        else:
+            return None
